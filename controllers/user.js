@@ -50,7 +50,7 @@ const authUser = async (input) => {
     }
 
     return {
-        token: createToken(userFind, process.env.SECRET, "24h")
+        token: createToken(userFind, process.env.SECRET_WORD, "24h")
     }
 
 }
