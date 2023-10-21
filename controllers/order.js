@@ -29,7 +29,7 @@ const getOrder = async (id) => {
 }
 
 
-const getOrderSeller = async (ctx) => {
+const getOrdersSeller = async (ctx) => {
 
     try {
         const orders = await Order.find({ seller: ctx.user.id }).populate('client');
@@ -39,7 +39,7 @@ const getOrderSeller = async (ctx) => {
     }
 }
 
-const getOrderState = async (state, ctx) => {
+const getOrdersState = async (state, ctx) => {
 
     try {
         const orders = await Order.find({ seller: ctx.user.id, state });
@@ -153,8 +153,8 @@ const deleteOrder = async (id, ctx) => {
 export default {
     getOrders,
     getOrder,
-    getOrderSeller,
-    getOrderState,
+    getOrdersSeller,
+    getOrdersState,
     newOrder,
     updateOrder,
     deleteOrder,
