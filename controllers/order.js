@@ -17,11 +17,11 @@ const getOrder = async (id) => {
     const order = await Order.findById(id);
 
     if (!order) {
-        throw new Error("Pedido no encontrado");
+        throw new Error("Order not found");
     }
 
     if (order.seller.toString() !== ctx.user.id) {
-        throw new Error("No tienes las credenciales");
+        throw new Error("You don't have the credentials");
     }
 
     return order;
@@ -57,11 +57,11 @@ const newOrder = async (input, ctx) => {
     const clientFind = await Client.findById(client);
 
     if (!clientFind) {
-        throw new Error("Cliente no encontrado");
+        throw new Error("Order not found");
     }
 
     if (clientFind.seller.toString() !== ctx.user.id) {
-        throw new Error("No tienes las credenciales");
+        throw new Error("You don't have the credentials");
     }
 
 
@@ -72,7 +72,7 @@ const newOrder = async (input, ctx) => {
         const product = await Product.findById(id);
 
         if (article.quantity > product.stock) {
-            throw new Error(`El articulo: ${product.name} excede la cantidad disponible`);
+            throw new Error(`The product: ${product.name} exceeds the available quantity`);
         } else {
             product.stock = product.stock - article.quantity;
             await product.save();
@@ -93,17 +93,17 @@ const updateOrder = async (id, input, ctx) => {
     const existsOrder = await Order.findById(id);
 
     if (!existsOrder) {
-        throw new Error("Pedido no encontrado");
+        throw new Error("Order not found");
     }
 
     const existClient = await Client.findById(client);
     if (!existClient) {
-        throw new Error("Cliente no encontrado");
+        throw new Error("Client not found");
     }
 
 
-    if (clientFind.seller.toString() !== ctx.user.id) {
-        throw new Error("No tienes las credenciales");
+    if (existClient.seller.toString() !== ctx.user.id) {
+        throw new Error("You don't have the credentials");
     }
 
     // update stock
@@ -114,7 +114,7 @@ const updateOrder = async (id, input, ctx) => {
             const product = await Product.findById(id);
 
             if (article.quantity > product.stock) {
-                throw new Error(`El articulo: ${product.name} excede la cantidad disponible`);
+                throw new Error(`The product: ${product.name} exceeds the available quantity`);
             } else {
                 product.stock = product.stock - article.quantity;
                 await product.save();
@@ -134,18 +134,18 @@ const deleteOrder = async (id, ctx) => {
     let order = await Order.findById(id);
 
     if (!order) {
-        throw new Error("Pedido no encontrado");
+        throw new Error("Order not found");
     }
 
     if (order.seller.toString() !== ctx.user.id) {
-        throw new Error("No tienes las credenciales");
+        throw new Error("You don't have the credentials");
     }
 
     await Order.findOneAndDelete({
         _id: id
     });
 
-    return "Pedido eliminado";
+    return "Order deleted";
 
 }
 

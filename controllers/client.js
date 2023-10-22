@@ -1,5 +1,6 @@
 import Client from '../models/Client.js';
-import Product from '../models/Product.js';
+import Order from '../models/Order.js';
+
 
 
 const getClients = async () => {
@@ -17,11 +18,11 @@ const getClient = async (id, ctx) => {
     const client = await Client.findById(id);
 
     if (!client) {
-        throw new Error("Cliente no encontrado");
+        throw new Error("Customer not found");
     }
 
     if (client.seller.toString() !== ctx.user.id) {
-        throw new Error("No tienes las credenciales");
+        throw new Error("You don't have the credentials");
     }
 
     return client;
@@ -107,17 +108,21 @@ const newClient = async (input, ctx) => {
     const client = await Client.findOne({ email });
 
     if (client) {
-        throw new Error("El cliente ya está registrado");
+        throw new Error("The client already exists");
     }
 
     const newClient = new Client(input);
     newClient.seller = ctx.user.id;
+
+    console.log('newClient', newClient)
+
 
     try {
         const result = await newClient.save();
         return result;
     } catch (error) {
         console.log(error);
+        throw new Error("Something went wrong");
     }
 }
 
@@ -126,11 +131,11 @@ const updateClient = async (id, input, ctx) => {
     let client = await Client.findById(id);
 
     if (!client) {
-        throw new Error("Cliente no encontrado");
+        throw new Error("Customer not found");
     }
 
     if (client.seller.toString() !== ctx.user.id) {
-        throw new Error("No tienes las credenciales");
+        throw new Error("You don't have the credentials");
     }
 
     client = await Client.findOneAndUpdate({
@@ -146,18 +151,21 @@ const deleteClient = async (id, ctx) => {
     let client = await Client.findById(id);
 
     if (!client) {
-        throw new Error("Cliente no encontrado");
+        throw new Error("Customer not found");
     }
 
     if (client.seller.toString() !== ctx.user.id) {
-        throw new Error("No tienes las credenciales");
+        throw new Error("You don't have the credentials");
     }
 
     await Client.findOneAndDelete({
         _id: id
     });
 
-    return "Cliente eliminado";
+    // delete all orders from client
+    await Order.deleteMany({ client: id });
+
+    return "Customer deleted";
 
 }
 

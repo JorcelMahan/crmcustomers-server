@@ -15,7 +15,7 @@ const getProduct = async (id) => {
     const product = await Product.findById(id);
 
     if (!product) {
-        throw new Error("Producto no encontrado");
+        throw new Error("Product not found");
     }
 
     return product;
@@ -37,7 +37,7 @@ const updateProduct = async (id, input) => {
     let product = await Product.findById(id);
 
     if (!product) {
-        throw new Error("Producto no encontrado");
+        throw new Error("Product not found");
     }
 
     product = await Product.findOneAndUpdate({
@@ -51,14 +51,14 @@ const deleteProduct = async (id) => {
     let product = await Product.findById(id);
 
     if (!product) {
-        throw new Error("Producto no encontrado");
+        throw new Error("Product not found");
     }
 
     await Product.findOneAndDelete({
         _id: id
     });
 
-    return "Producto eliminado";
+    return "Product deleted";
 
 }
 

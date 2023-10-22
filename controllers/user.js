@@ -19,7 +19,7 @@ const newUser = async (input) => {
     const userFind = await User.findOne({ email });
 
     if (userFind) {
-        throw new Error("El usuario ya está registrado");
+        throw new Error("The user already exists");
     }
 
     const salt = await bcryptjs.genSalt(10);
@@ -40,13 +40,13 @@ const authUser = async (input) => {
     const userFind = await User.findOne({ email });
 
     if (!userFind) {
-        throw new Error("El usuario no existe");
+        throw new Error("The user does not exist");
     }
 
     const passwordCorrect = await bcryptjs.compare(password, userFind.password);
 
     if (!passwordCorrect) {
-        throw new Error("El password es incorrecto");
+        throw new Error("The password is incorrect");
     }
 
     return {
